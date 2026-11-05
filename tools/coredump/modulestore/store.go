@@ -273,7 +273,11 @@ func (store *Store) UnpackModuleToPath(id ID, outPath string) error {
 	}
 	defer out.Close()
 
-	return store.UnpackModule(id, out)
+	err = store.UnpackModule(id, out)
+	if err != nil {
+		_ = os.Remove(outPath)
+	}
+	return err
 }
 
 // UnpackModule extracts a module from the store, writing it to the given writer.
